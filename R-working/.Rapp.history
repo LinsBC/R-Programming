@@ -1,0 +1,275 @@
+class(b)
+class
+?.class
+help class
+help.class
+?class
+x <- c(4,TRUE)
+x
+class(x)
+x <- c(1,3,5)
+x
+y <- c(3,2,10)
+cbind(x,y)
+x <- list(2, "a", "b", TRUE)
+x
+x[[1]]
+class(x[[1]])
+x <- 1:4
+x
+y <- 2:3
+y
+x + y
+class(x+y)
+x <- c(3,5,1,10,12,6)
+x
+x[x<6]==0
+x
+x[x<6] <- 0
+x
+x <- c(3,5,1,10,12,6)
+x[x>=6] <- 0
+x
+x <- c(3,5,1,10,12,6)
+x[x!=6] <-0
+x
+x <- c(3,5,1,10,12,6)
+x[x %in% 1:5] <- 0
+x
+x <- c(3,5,1,10,12,6)
+x[x == 6] <- 0
+x
+x <- c(3,5,1,10,12,6)
+x[x <= 5] <- 0
+x
+x <- c(3,5,1,10,12,6)
+x[x > 6] <- 0
+x
+x <- c(3,5,1,10,12,6)
+x[x >0] <- 6
+x
+x <- c(3,5,1,10,12,6)
+x[x == 0] <- 6
+x
+x[x == 0] < 6
+x
+wd
+getwd()
+data <- read.csv("hw1_data.csv")
+colnames(data)
+?nrow
+data[2]
+data[,2]
+tail(data,2)
+data[47,]
+bad <- is.na(data)
+class(bad)
+data$Ozone
+data[1]
+bad <- is.na(data[1])
+class(bad)
+bad
+data(bad)
+data[bad]
+colSums(is.na(data))
+ozone <- data[1]
+data["Ozone"]
+ozone
+bad <- is.na(ozone)
+bad
+ozone[!bad]
+?mean
+mean(ozone[!bad])
+data[$Ozone>31]
+data[data$Ozone>31]
+data[data$Ozone>31,]
+data[data$Ozone>31 && data$Temp>90,]
+data[data$Temp90,]
+data[data$Temp>90,]
+high <- data[data$Temp>90,]
+high
+high[high$Ozone>31,]
+mean(high$Solar.R)
+data[data$Temp>90 & data$Ozone>31,]
+mean(data[data$Temp>90 & data$Ozone>31,]$Solar.R)
+new <-data[data$Temp>90 & data$Ozone>31,]
+new
+?mean
+mean(new[2])
+new[2]
+solar <- new[2]
+solar
+mean(solar)
+bad <- is.na(solar)
+bad
+solar[!bad]
+mean(solar[!bad])
+mean(!is.na(data[data$Temp>90 & data$Ozone>31,2]))
+newsolar <- data[data$Temp>90&data$Ozone>31,2]
+newsolar
+mean(newsolar)
+mean(!is.na(newsolar))
+bad <- is.na(newsolar)
+mean(newsolar[!is.na(newsolar)])
+mean(data[!is.na(data$Temp>90 & data$Ozone>31,2)])
+mean(data[!is.na(data[data$Temp>90 & data$Ozone>31,2])])
+june <- data[data$Month=6,]
+june <- data[data$Month==6,]
+june
+mean(complete.cases(june))
+good <- complete.cases(june)
+good
+mean(june[june$Temp])
+june[good,]
+june[good,june$Temp]
+june[$Temp]
+june[june$Temp]
+june[,june$Temp]
+june[,4]
+june[good,4]
+mean(june[good,4])
+good <-complete.cases(data)
+cleandata <- data[good]
+cleandata <- data[good][,]
+data[good]
+ok <-complete.cases(june)
+sum(ok)
+sum(!ok)
+june[ok,]
+june[ok]
+june[ok,ok]
+sum(june)
+nrows(june)
+?rows
+nrow(june)
+june <- june[ok,]
+mean(june[june$Temp])
+mean(june[4])
+mean(june[,4])
+data
+sum(data[data$Temp==6,])
+sum(data[data$Temp==6])
+sum(data)
+sum(data[])
+nrows(data)
+nrow(data)
+cleandata
+cleandata <- data[good,]
+cleandata
+nrow(cleandata)
+cleandata[cleandata$Temp]
+cleandata[cleandata$Temp,]
+cleandata[,cleandata$Temp]
+cleandata[,"Temp"]
+cleandata[,"Temp", drop=FALSE]
+cleandata[,4]
+june <- cleandata[cleandata$Temp==6,]
+june
+june <- cleandata[cleandata$Month==6,]
+june
+juneTemp <- june[june$Temp]
+juneTemp <- june[june$Temp,]
+juneTemp
+class(june)
+class(june[,4])
+june[,4]
+mean(june[,4])
+data <- read.csv("hw1_data.csv")
+mean(data[,"Temp"])
+mean(data[data$Month==6,"Temp"])
+?max
+max(data[data$Month==5,"Ozone"])
+max(data[data$Month==5,"Ozone"],na.rm)
+max(data[data$Month==5,"Ozone"],na.rm=FALSE)
+max(data[data$Month==5,"Ozone"],na.rm=TRUE)
+head(data,2)
+nrow(data)
+tail(data,2)
+data[47,"Ozone"]
+ok <- complete.cases(data)
+sum(!ok)
+ok <- complete.cases(data[,"Ozone"])
+sum(!ok)
+mean(data[ok,"Ozone"])
+mean(data[data$Ozone>31&data$Temp>90,])
+mean(data[data$Ozone>31&data$Temp>90,],na.rm=TRUE)
+mean(data[!is.na(data[data$Temp>90 & data$Ozone>31,2])])
+?mean
+data[data$Ozone>31&data$Temp>90,]
+mean(data[data$Ozone>31&data$Temp>90,],,na.rm=TRUE)
+subdata <-data[data$Ozone>31&data$Temp>90,]
+subdata
+mean(data[data$Ozone>31&data$Temp>90,"Solar.R"],,na.rm=TRUE)
+mean(data[data$Month==6,"Temp"])
+max(data[data$Month==5,"Ozone"],na.rm=TRUE)
+mean(data[data$Ozone>31&data$Temp>90,"Solar.R"],,na.rm=TRUE)
+max(data[data$Month==5,"Ozone"],na.rm=TRUE)
+mean(data[data$Month==6,"Temp"])
+sum(!complete.cases(data))
+install.packages("swirl")
+library(swirl)
+ls()
+rm(list=ls())
+ls()
+install_from_swirl("R Programming")
+?seq_along
+getwd()
+formal(plot)
+formals(plot)
+?plot
+?paste
+paste
+?make.power
+?name
+xor(4 >= 9, 8 != 8.0)
+xor(identical(xor, 'xor'), 7 == 7.0)
+xor(!!TRUE, !!FALSE)
+xor(!isTRUE(TRUE), 6 > -1)
+my_mean <- function(my_vector) {#
+  # Write your code here!#
+  # Remember: the last expression evaluated will be returned! #
+  vsum <- sum(my_vector)#
+  vlen <- length(my_vector)#
+  vmean <- vsum / vlen#
+}
+my_mean(c(2,6,9,2))
+x <- my_mean(c(2,6,9,2))
+x
+my_mean <- function(my_vector) {#
+  # Write your code here!#
+  # Remember: the last expression evaluated will be returned! #
+  vsum <- sum(my_vector)#
+  vlen <- length(my_vector)#
+  vmean <- vsum / vlen#
+  vmean#
+}
+my_mean(c(2,6,9,2))
+remainder <- function(num, divisor = 2) {#
+  # Write your code here!#
+  # Remember: the last expression evaluated will be returned! #
+  x <- num %% divisor#
+  x#
+}
+remainder(9)
+remainder(9,3)
+evaluate <- function(func, dat){#
+  # Write your code here!#
+  # Remember: the last expression evaluated will be returned! #
+  result <- func(dat)#
+  result#
+}
+evaluate(sum, c(2, 3, 6))
+evaluate(sum, c(2, 4, 6))
+evaluate(median, c(7,40,9))
+evaluate(floor, 11.1)
+evaluate(function(x){x+1}, 6)
+evaluate(function(x){x[1]}, c(8,4,0))
+evaluate(function(x){x[length(x)]}, c(8,4,0))
+telegram <- function(...){#
+  paste("START", ..., "STOP")#
+}
+telegram("This is a test")
+getwd()
+tmp <- read.csv('specdata/200.csv', 10)
+tmp
+?cd

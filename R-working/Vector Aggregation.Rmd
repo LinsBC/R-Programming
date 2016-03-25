@@ -1,0 +1,133 @@
+---
+title: "Aggregate Using Only Vectors"
+output: html_document
+---
+
+Some of the assignments ask you to take some data from multiple files and compute some value across the aggregate data. For efficiency, we could use one of the apply functions. But in the first assignment, we haven’t studied the apply functions yet.
+
+There are ways to use a container data frame to collect the data using something like rbind() but that can be highly inefficient. You could also use the c() function but that’s inefficient as well.
+
+One approach would be to use vectors to store the aggregate data. One of the advantages of vectors is that you can add to a vector using an index that doesn’t yet exist. For example,
+
+```{r}
+a <- 1:9
+a[10] <- 10 
+a
+```
+
+You can also add multiple values by using a range of indices.
+
+```{r}
+a[11:20] <- 21:30
+a
+```
+
+So how do we do that when you have an unknown number of values? The easiest way is to use starting and ending indices. The starting index always begins with one because R vectors are 1-based. When we add to the vector, we’ll want to change start to the previous ending index plus 1. Then the new ending index would be start plus the number of items in the vector we’re adding minus 1.
+
+```{r}
+a <- 1:10
+x <- 11:20
+start <- length(a) + 1  ## length(a) is the original ending index
+end <- start + length(x) - 1
+a[start:end] <- x
+a
+```
+
+Seems pretty straight forward. But we need to add a few things if we’re going to use it in a loop. Let’s see how that might work.
+
+In the following example, we’re going to use a list to simulate reading data from three files. The main reason for doing that is so we can reference the list using an index instead of reading from a file.
+
+First, we initialize an empty results vector. Then we initialize start and end indices to zero.
+
+Inside the loop, we retrieve a sample vector and get it’s size. We set start to the previous end plus one and set end to start plus the size of the sample vector minus one. Note in the example that we use an if statement to check the size. We only want to add to our results when size > 0.
+
+```{r}
+## Sample data
+a <- 1:10
+b <- 11:15
+c <- numeric()
+vectors <- list(a=a, b=b, c=c)
+
+## Results vector
+results <- numeric()
+
+## Initialize start and end indices
+start <- end <- 0
+
+for(index in seq_along(vectors)) {
+  values <- vectors[[index]]
+  size <- length(values)
+  
+  if(size > 0) {
+    start <- end + 1
+    end <- start + size - 1
+    results[start:end] <- values
+  }
+}
+
+results
+```
+
+So what happens if you want to collect multiple results vectors with different lengths? In that case, you’d use separate start and end indices for each results vector. Then you’d want to test the size of each before adding to the corresponding vector in the results list. In the following example, we’ll use data frames of different lengths. And when we’re done, we’ll construct a results data.frame using unlist() and get some statistics.
+
+```{r}
+## Sample data
+frames <- list(data.frame(a=1:10, b=21:30), data.frame(a=11:15, b=31:35))
+
+## Results vector
+results <- list(a=numeric(), b=numeric())
+
+## Initialize start and end indices
+start.a <- start.b <- end.a <- end.b <- 0
+
+for(index in seq_along(frames)) {
+  values <- frames[[index]]
+  size.a <- length(values$a)
+  size.b <- length(values$b)
+  
+  if(size.a > 0) {
+    start.a <- end.a + 1
+    end.a <- start.a + size.a - 1
+    results$a[start.a:end.a] <- values$a
+  }
+  if(size.b > 0) {
+    start.b <- end.b + 1
+    end.b <- start.b + size.b - 1
+    results$b[start.b:end.b] <- values$b
+  }
+}
+
+results <- data.frame(a=unlist(results$a), b=unlist(results$b))
+summary(results)
+```
+
+In simpler cases we might not need to aggregate all the values. We might need to just aggregate some calculations from the vectors. In that case we just use the index from seq_along.
+
+```{r}
+## Results vector
+values <- numeric()
+
+for(index in seq_along(frames)) {
+  frame <- frames[[index]]
+  value <- mean(frame$a) + mean(frame$b)
+  values[index] <- value
+}
+
+values
+```
+We could also combine our results vector with itself but that’s not as efficient as direct access with an index.
+
+```{r}
+values <- numeric()
+
+for(index in seq_along(frames)) {
+  frame <- frames[[index]]
+  value <- mean(frame$a) + mean(frame$b)
+  values <- c(values, value)
+}
+
+values
+```
+As in all things R, this is just one method of doing things. But hopefully it’ll give you a few ideas.
+
+Note: This post is now pinned and available to all sessions but has been closed for comments. If you have questions on any of these methods please post a new thread. Thanks.

@@ -1,0 +1,116 @@
+---
+title: "Subsetting with bracket notation"
+output: html_document
+---
+
+Here are a few pointers for using bracket notation. Personally, I find bracket notation a bit more intuitive. Keeping in mind that the left side of the comma is rows and the right side is columns, we can do something like this:
+
+```{r eval = FALSE}
+DF[some_condition, some_columns]
+```
+
+If we want multiple conditions, we can also do this:
+
+```{r eval = FALSE}
+DF[condition1 & condition2, some_columns] 
+```
+
+You can use & and | (pipe) to combine conditions. The & is a logical AND and the | (pipe) is a logical OR. You can also do negation using
+
+*!(some_condition)*. 
+
+You can also use numeric values to select certain rows - 
+
+*df[ 1 , ] or df [ 1:10 , ]*. 
+
+If you want all rows, just leave the left side of the comma empty - 
+
+*DF[ , some_columns]*. 
+
+If you want all columns, leave the right side of the comma emtpy - 
+
+*DF [some_condition , ]* 
+
+Also keep in mind that, when using bracket notation with data frames, columns are required when the first parameter is a condition so the comma is also required. Columns can be numeric or column names. If you use column names, they must be quoted. So, *c(1,3)* and *c("columnA", "columnB")* are both acceptable. 
+
+For a single column, you can leave out *c()*. Also, *DF[ , ]\$columnA* is the same as *DF[ , "columnA"]* which is the same as *DF$columnA*. However, you can use variables inside brackets but you can't use a variable with $. 
+
+
+If there is only a single value N without a comma, R returns a data frame with single brackets - 
+*df[N]*
+and a vector with double brackets - 
+*df[[N]]* 
+where N is a column number or a quoted column name.
+
+**Adding a few examples of conditions.**
+
+There are two things to remember when using conditions in a data.frame.
+
+* The condition(s) go on the left side of the comma (since we're selecting rows)
+* The comma is required 
+```{r}
+df <- data.frame(X=1:10, Y=rep(1:2, 5))
+```
+**Single Condition**
+
+```{r}
+df[df$Y == 2, ]
+```
+
+**Combining conditions.**
+
+AND - using the ampersand symbol
+
+```{r}
+df[df$Y == 2 & df$X <=5, ]
+```
+```{r}
+df[df$Y == 2 & df$X %in% c(5:10), ]
+```
+
+OR - using the pipe symbol
+```{r}
+df[df$Y == 2 | df$X == 5, ]
+```
+```{r}
+df[df$Y == 2 | df$X %in% c(1,9), ]
+```
+
+**Which()**
+
+The which() function returns a vector of indices where a given condition is true:
+
+```{r}
+which(df$Y == 2)
+```
+```{r}
+df[which(df$Y == 2), ]
+```
+Sometimes you might want to save some indices for use later:
+
+```{r}
+idx <- which(df$Y == 2)
+
+df[c(2,10), "Y"] <- 1
+
+df[idx,]
+```
+Using which() is functionally the same as putting the condition directly inside the brackets. That's because when you use a logical vector for rows, the logical values get converted to row indices. So, you can use either a logical vector or a numeric vector for row indices.
+
+```{r}
+df[which(df$Y == 2), ]
+```
+```{r}
+df[df$Y==2, ]
+```
+
+**Subsetting a Column**
+
+You can also subset a single column using the $ sign and conditions.
+
+```{r}
+df$X[df$Y == 1]
+```
+```{r}
+df$X[df$X < 5 | df$Y == 2]
+```

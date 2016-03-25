@@ -1,0 +1,109 @@
+---
+title: "General Assignment Tips"
+output: html_document
+---
+
+Here are a few general tips when working with some of the assignments. Feel free to add your own or ask questions. But if you add a tip, please keep the code generic to avoid breaking the Honor Code.
+
+**Getting File Paths Into a Vector**
+
+There are a few ways to get file paths based on directory and id.
+
+Use list.files and take a subset from id.
+```{r eval = FALSE}
+list.files(directory, full.names=TRUE)[id]
+## [1] "specdata/001.csv" "specdata/010.csv" "specdata/100.csv"
+```
+
+Use paste and formatC.
+```{r eval = FALSE}
+paste(directory, "/", formatC(id, width=3, flag="0"), ".csv", sep="")
+## [1] "specdata/001.csv" "specdata/010.csv" "specdata/100.csv"
+```
+Use sprintf (not covered in materials).
+```{r eval = FALSE}
+sprintf("%s/%03d.csv", directory, id)
+## [1] "specdata/001.csv" "specdata/010.csv" "specdata/100.csv"
+```
+**Loops and Indexes**
+
+Suppose you want to loop over an integer vector and build another vector. The problem is if you use the first vector and it’s not one-based, for example 1:10, then if you use elements of that vector as indexes you’ll wind up with missing values in the vector you’re building. You’ll also get some warning messages (I’ve turned off warnings in the example).
+```{r}
+v1 <- c(4,5,6)
+v2 <- numeric()
+for(idx in v1)
+  v2[idx] <- idx
+
+v2
+```
+
+To solve that, we can use a counter as an index. We initialize a counter to one and each time we loop through we add one after processing has completed for that iteration.
+```{r}
+v2 <- numeric()
+idx <- 1
+for(value in v1) {
+  v2[idx] <-value
+  
+  idx <- idx + 1
+}
+
+v2
+```
+You can use the above approach if you want to create some temporary vectors and then build a data frame after processing.
+```{r}
+X <- Y <- numeric()
+idx <- 1
+for(value in v1) {
+  X[idx] <- value
+  Y[idx] <- value^2
+  
+  idx <- idx + 1
+}
+
+DF <- data.frame(X, Y, row.names=LETTERS[X])
+DF
+```
+This is a case where more code might be more efficient than using something like rbind() that might result in a performance hit.
+
+***Using an Index that Doesn’t Exist***
+
+One of the assignments has you report NA on a column when a row doesn’t exist. Suppose you’re looking for row 10 and if the row doesn’t exist then set a column to NA. When an index is greater than the number of rows then R returns NA.
+
+```{r}
+DF
+
+data.frame(X="some_value", Y=DF$Y[10])
+```
+Be careful about a negative index value though because a negative index means exclude that member.
+```{r}
+DF[-1,]
+```
+**Don’t Call complete() in corr()**
+
+I’ve seen a few students that call complete to get complete cases for a group of files. The problem is you still need to read the files to calculate the correlation vector. So, you wind up reading every file twice.
+
+All you need to do to get the number of complete cases is read the file and run sum() on complete.cases().
+
+So, you can loop through the files and if complete cases > threshold then calculate cor() and add it to a vector. If you initialize your vector to numeric() and no files have complete cases then when you return the vector it’s an empty numeric vector which is what the instructions call for.
+```{r eval = FALSE}
+DF <- read.csv(files[1])
+
+sum(complete.cases(DF))
+## [1] 117
+```
+**Return and Print**
+
+You don’t need to use return unless you’re prematurely returning from a function. And you never need to use print since R will print the last thing evaluated.
+```{r}
+my_func <- function(my_value) {
+  if(my_value > 10) {
+    ## do some other processing
+    return(my_value)
+  }
+  sqrt(my_value)
+}
+
+my_func(40)
+
+my_func(9)
+```
